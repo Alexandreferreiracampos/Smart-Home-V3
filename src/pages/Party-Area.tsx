@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native'
+import {View, Text, StyleSheet, TouchableOpacity, Image, ToastAndroid} from 'react-native'
 import Header from '../components/Header';
 import Button from '../components/Button';
 import led from '../assets/led.png';
 import piscina from '../assets/piscina.png';
 import pendente from '../assets/pendente.png';
 import lamp from '../assets/lamp.png'
+import music from '../assets/nota-musical.png'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import * as Animatable from 'react-native-animatable';
@@ -48,6 +49,19 @@ export default function PartyArea(){
 
     }
 
+    const alertToast=()=>{
+
+        ToastAndroid.showWithGravityAndOffset(
+            "Mantenha pressione para ligar ou desligar o Amplificador",
+            ToastAndroid.LONG,
+            ToastAndroid.CENTER,
+            25,
+            50
+        );
+       
+
+    }
+
     return(
         <View style={styles.container}>
             <Header title='Edícula' status={statusReguest} />
@@ -68,6 +82,13 @@ export default function PartyArea(){
                     
                     <Button title='Arandelas' ico={led} width={80} height={80} onPress={() => command(devices.edicula+"/releg")} />  
                     <Button title='Piscina' ico={piscina} width={80} height={80} onPress={() => command(devices.edicula+"/releh")} />
+                    
+                </Animatable.View>
+
+                <Animatable.View animation="slideInUp"  delay={100} style={{ flexDirection: 'row'}}>
+                    
+                    <Button title='Som' ico={music} width={30} height={30} onPress={()=>alertToast()} onLongPress={() => command(devices.edicula+"/relej")} />  
+                    
                     
                 </Animatable.View>
               

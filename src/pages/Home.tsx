@@ -23,6 +23,7 @@ export default function Home() {
     const [activeTextArandela, setActiveTextArandela] = useState(false)
     const [activeTextGaragem, setActiveTextGaragem] = useState(false)
     const navigation = useNavigation();
+    const [statusReguest, setReguest] = useState('red');
 
 
     const [devices, setDevices] = useState({ fan: '', Bedroom: '', livingRoom: '', name: '', escritorio: '', edicula: '', host:'', auth:'' });
@@ -58,15 +59,15 @@ export default function Home() {
     }
 
     const command = (valor: any) => {
-
+        
+       
         let url = 'http://' + valor
         let req = new XMLHttpRequest();
-
         req.onreadystatechange = () => {
             if (req.status == 200 && req.readyState == 4) {
-
+                setReguest('#39d76c') 
             } else {
-
+                setReguest('red')
             }
         }
 
@@ -167,7 +168,7 @@ export default function Home() {
 
             <View style={styles.header}>
                 <Animatable.Text animation="slideInLeft" style={styles.title}>Olá {devices.name}</Animatable.Text>
-                <Animatable.Text animation="slideInRight" onPress={() => setModalAtive(true)}><FontAwesome name="gears" size={24} color='#39d76c'/></Animatable.Text>
+                <Animatable.Text animation="slideInRight" onPress={() => setModalAtive(true)}><FontAwesome name="gears" size={24} color={statusReguest}/></Animatable.Text>
             </View>
             <View style={styles.subHeader}>
         <Image source={require('../assets/1.jpeg')} style={styles.image}></Image>
@@ -187,16 +188,16 @@ export default function Home() {
 
             <View style={styles.containerButton} >
                 
-                    <Button title='Sala' ico={BTLivingRoom} width={90} height={90} onPress={() => navigatioScreen('LivingRoom')} onLongPress={()=>console.log("onLongPress")} />
-                    <Button title='Quarto' ico={BTBedroom1} width={90} height={90} onPress={() => navigatioScreen('Bedroom')} onLongPress={()=>console.log("onLongPress")}/>
+                    <Button title='Sala' ico={BTLivingRoom} width={90} height={90} onPress={() => navigatioScreen('LivingRoom')} onLongPress={() => command(devices.livingRoom+"/?rele6")} />
+                    <Button title='Quarto' ico={BTBedroom1} width={90} height={90} onPress={() => navigatioScreen('Bedroom')} onLongPress={() => command(devices.Bedroom+"/rele4")}/>
                     
              
             </View>
             <View style={styles.containerButton} >
                
                     
-                    <Button title='Edícula' ico={churrasco} width={90} height={90} onPress={() => navigatioScreen('PartyArea')} onLongPress={()=>console.log("onLongPress")}/>
-                    <Button title='Escritório' ico={escritorio} width={90} height={90} onPress={() => navigatioScreen('GamerRoom')} onLongPress={()=>console.log("onLongPress")}/>
+                    <Button title='Edícula' ico={churrasco} width={90} height={90} onPress={() => navigatioScreen('PartyArea')} onLongPress={() => command(devices.edicula+"/relee")}/>
+                    <Button title='Escritório' ico={escritorio} width={90} height={90} onPress={() => navigatioScreen('GamerRoom')} onLongPress={() => command(devices.escritorio+"/pc")}/>
               
             </View>
 

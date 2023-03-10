@@ -187,9 +187,14 @@ export default function Bedroom() {
                                 maximumTrackTintColor='#cdcdcd'
                                 thumbTintColor='#868686'
                                 onSlidingStart={dimerValor()}
+                                thumbTouchSize={{height:70}}
+                                containerStyle={styles.containerSlider}
+                                thumbStyle={styles.thumb}
+                                trackStyle={styles.track}
                                 onValueChange={value => setSize(value[0].toFixed())}
                                 value={size}
                                 />
+                                
                             
                     </View>
                     <TouchableOpacity style={{ width: 50, left: -2 }} onPress={() => command(devices.Bedroom+'/fade')}><Entypo name="light-down" size={35} color='#868686' /></TouchableOpacity>
@@ -260,5 +265,29 @@ const styles = StyleSheet.create({
         shadowRadius: 1.22,
         elevation: 2,
 
+    },
+    containerSlider:{
+        left:'2%',
+        height: 30,
+        width:'96%'
+    },
+    thumb: {
+        backgroundColor: 'white',
+        borderRadius: 20 / 2,
+        height: 15,
+        borderColor: '#868686',
+        borderWidth: 2,
+        shadowColor: '#cdcdcd',
+        shadowOffset: {
+            width: 0,
+            height: 0,
+        },
+        shadowOpacity: 1,
+        shadowRadius: 2,
+        width: 15,
+    },
+    track: {
+        backgroundColor: '#cdcdcd',
+        height: 3,
     },
 })

@@ -63,8 +63,8 @@ export default function LivingRoom() {
                 </View>
              
                 <Animatable.View animation="slideInUp" style={{ flexDirection: 'row'}}>
-                    <Button title='Luz' ico={lamp} width={80} height={80} onPress={() => command(devices.escritorio+"/luz'")} />
-                    <Button title='pc' ico={pcgamer} width={80} height={80} onPress={() => command(devices.escritorio+"/pc'")} />
+                    <Button title='Luz' ico={lamp} width={80} height={80} onPress={() => command(devices.escritorio+"/luz")} />
+                    <Button title='pc' ico={pcgamer} width={80} height={80} onPress={() => command(devices.escritorio+"/pc")} />
                     
                 </Animatable.View>
                 
