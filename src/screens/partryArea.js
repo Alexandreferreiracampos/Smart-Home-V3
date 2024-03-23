@@ -8,6 +8,8 @@ import pendente from '../assets/pendente.png';
 import lamp from '../assets/lamp.png'
 import music from '../assets/nota-musical.png'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+
 
 import * as Animatable from 'react-native-animatable';
 
@@ -21,7 +23,7 @@ export default function PartyArea(){
     if(validateData == true){
     async function loadStorgeUserName(){
 
-        const dataDevices = await AsyncStorage.getItem('@Device:quarton')
+        const dataDevices = await AsyncStorage.getItem('@smartHome:device')
         const objeto = JSON.parse(dataDevices || '');
         setDevices(objeto)
         
@@ -31,21 +33,21 @@ export default function PartyArea(){
 
     }
 
-    const command = (valor: any) => {
+    const command = async (valor) => {
+        setReguest('red')
+        try {
 
-        let url = 'http://'+valor
-        let req = new XMLHttpRequest();
-
-        req.onreadystatechange = () => {
-            if (req.status == 200 && req.readyState == 4) {
-                setReguest('#39d76c')
-            } else {
-                setReguest('red')
+            const response = await fetch(`http://${valor}`, {
+                method: 'GET',
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
+            setReguest('#39d76c')
+            
+        } catch (error) {
+            
         }
-
-        req.open('GET', url)
-        req.send()
 
     }
 
@@ -71,24 +73,30 @@ export default function PartyArea(){
             </View>
             <View style={styles.containerButton}>
                 <View style={styles.titleDevices}>
-                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#868686' }}>Devices</Text>
+                    <Text numberOfLines={1} allowFontScaling={false} style={{ fontSize: 20, fontWeight: 'bold', color: '#868686' }}>Devices</Text>
                 </View>
              
                 <Animatable.View animation="slideInUp" style={{ flexDirection: 'row'}}>
+                    <View style={styles.row}>
                     <Button title='Luz' ico={lamp} width={80} height={80} onPress={() => command(devices.edicula+"/relee")} />
+                    </View>
+                    <View style={styles.row}>
                     <Button title='Leds' ico={pendente} width={80} height={80} onPress={() => command(devices.edicula+"/relef")} />  
+                    </View>
                 </Animatable.View>
                 <Animatable.View animation="slideInUp"  delay={100} style={{ flexDirection: 'row'}}>
-                    
+                <View style={styles.row}>
                     <Button title='Arandelas' ico={led} width={80} height={80} onPress={() => command(devices.edicula+"/releg")} />  
+                    </View>
+                    <View style={styles.row}>
                     <Button title='Piscina' ico={piscina} width={80} height={80} onPress={() => command(devices.edicula+"/releh")} />
-                    
+                    </View>
                 </Animatable.View>
 
                 <Animatable.View animation="slideInUp"  delay={100} style={{ flexDirection: 'row'}}>
-                    
+                    <View style={{width:'60%'}}>
                     <Button title='Som' ico={music} width={30} height={30} onPress={()=>alertToast()} onLongPress={() => command(devices.edicula+"/relej")} />  
-                    
+                    </View>
                     
                 </Animatable.View>
               
@@ -136,5 +144,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'rgb(243,243,243)'
     
+    },
+    row: {
+        flex:1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 })

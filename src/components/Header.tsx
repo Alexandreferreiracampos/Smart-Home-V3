@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/core';
 
 
 
+
 import * as Animatable from 'react-native-animatable';
 import { useState } from 'react';
 
@@ -34,12 +35,12 @@ export default function Header({ title, status,statusModal,comandos, ...rest }: 
         <View style={styles.header}>
            
             <TouchableOpacity style={{ width: 45, height: 35}}  >
-                <Animatable.Text animation="slideInLeft" onPress={() => navigatioScreen('Home')}><AntDesign name="back" size={35} color="#868686"/></Animatable.Text>
+                <Animatable.Text numberOfLines={1} allowFontScaling={false}  animation="slideInLeft" onPress={() => navigatioScreen('Home')}><AntDesign name="back" size={35} color="#868686"/></Animatable.Text>
             </TouchableOpacity>
             
             <Animatable.Text animation="slideInLeft"  style={styles.title}>{title}</Animatable.Text>
             <TouchableOpacity style={{ width: 30, height: 25}} onPress={()=>setModalAtive(true)}>
-                <Animatable.Text onPress={comandos} animation="slideInRight" delay={500} style={{ width: 40, height: 30}}><FontAwesome5 name="wifi" size={24} color={status} /></Animatable.Text>
+                <Animatable.Text numberOfLines={1} allowFontScaling={false}  onPress={comandos} animation="slideInRight" delay={500} style={{ width: 40, height: 30}}><FontAwesome5 name="wifi" size={24} color={status} /></Animatable.Text>
             </TouchableOpacity>
            
 

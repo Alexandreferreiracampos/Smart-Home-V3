@@ -4,6 +4,8 @@ import Button from '../components/Button';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import pcgamer from '../assets/pc-gamer.png';
 import lamp from '../assets/lamp.png';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+
 
 import * as Animatable from 'react-native-animatable';
 
@@ -21,7 +23,7 @@ export default function LivingRoom() {
     if(validateData == true){
     async function loadStorgeUserName(){
 
-        const dataDevices = await AsyncStorage.getItem('@Device:quarton')
+        const dataDevices = await AsyncStorage.getItem('@smartHome:device')
         const objeto = JSON.parse(dataDevices || '');
         setDevices(objeto)
         
@@ -33,21 +35,21 @@ export default function LivingRoom() {
 
   
 
-    const command = (valor: any) => {
+    const command = async (valor) => {
+        setReguest('red')
+        try {
 
-        let url = 'http://'+valor
-        let req = new XMLHttpRequest();
-
-        req.onreadystatechange = () => {
-            if (req.status == 200 && req.readyState == 4) {
-                setReguest('#39d76c')
-            } else {
-                setReguest('red')
+            const response = await fetch(`http://${valor}`, {
+                method: 'GET',
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
+            setReguest('#39d76c')
+            
+        } catch (error) {
+            
         }
-
-        req.open('GET', url)
-        req.send()
 
     }
 
@@ -59,13 +61,16 @@ export default function LivingRoom() {
       </View>
       <View style={styles.containerButton}>
                 <View style={styles.titleDevices}>
-                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#868686' }}>Devices</Text>
+                    <Text numberOfLines={1} allowFontScaling={false}  style={{ fontSize: 20, fontWeight: 'bold', color: '#868686' }}>Devices</Text>
                 </View>
              
                 <Animatable.View animation="slideInUp" style={{ flexDirection: 'row'}}>
+                    <View style={styles.row}>
                     <Button title='Luz' ico={lamp} width={80} height={80} onPress={() => command(devices.escritorio+"/luz")} />
+                    </View>
+                    <View style={styles.row}>
                     <Button title='pc' ico={pcgamer} width={80} height={80} onPress={() => command(devices.escritorio+"/pc")} />
-                    
+                    </View>
                 </Animatable.View>
                 
                 </View>
@@ -80,7 +85,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: '100%',
     alignItems: 'center',
-
 },
 subHeader: {
     width: "100%",
@@ -111,6 +115,11 @@ containerButton: {
     alignItems: 'center',
     backgroundColor: 'rgb(243,243,243)'
 
+},
+row: {
+    flex:1,
+    justifyContent: 'center',
+    alignItems: 'center',
 },
 
 })

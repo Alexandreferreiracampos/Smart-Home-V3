@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet,StatusBar, Image} from 'react-native';
 import Button from '../components/Button';
 import Header from '../components/Header';
 import { Entypo } from '@expo/vector-icons';
@@ -8,6 +8,7 @@ import lamp from '../assets/lamp.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Animatable from 'react-native-animatable';
 import {Slider} from '@miblanchard/react-native-slider';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 
 var dimer0 = false
@@ -53,7 +54,7 @@ export default function Bedroom() {
     if(validateData == true){
     async function loadStorgeUserName(){
 
-        const dataDevices = await AsyncStorage.getItem('@Device:quarton')
+        const dataDevices = await AsyncStorage.getItem('@smartHome:device')
         const objeto = JSON.parse(dataDevices || '');
         setDevices(objeto)
         
@@ -64,30 +65,31 @@ export default function Bedroom() {
 
     }
  
-     
-   
-    const command = (valor: any) => {
+    const command = async (valor) => {
+        setReguest('red')
+        try {
 
-        let url = 'http://'+valor
-        let req = new XMLHttpRequest();
-        req.onreadystatechange = () => {
-            if (req.status == 200 && req.readyState == 4) {
-                setReguest('#39d76c')
-                fanStatus()
-            } else {
-                setReguest('red')
+            const response = await fetch(`http://${valor}`, {
+                method: 'GET',
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
-        }
-        req.open('GET', url)
-        req.send()
+            setReguest('#39d76c')
 
-        switch (valor) {
-            case devices.Bedroom+'/fade':
-                setSize(0)
-                break;
-
+            switch (valor) {
+                case devices.Bedroom+'/fade':
+                    setSize(0)
+                    break;
+    
+            }
+            
+        } catch (error) {
+            
         }
+
     }
+     
     const dimerValor = () => {
 
         if(size == 0 && dimer0 == true ){
@@ -163,6 +165,7 @@ export default function Bedroom() {
 
     return (
         <Animatable.View style={styles.container}>
+            <StatusBar backgroundColor={'rgb(47,93,180)'} barStyle="auto-content" />
             <Header title={'Quarto'} status={statusReguest}/>
             <View style={styles.subHeader}>
                 
@@ -171,11 +174,15 @@ export default function Bedroom() {
             </View>
             <View style={styles.containerButton}>
                 <View style={styles.titleDevices}>
-                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#868686' }}>Devices</Text>
+                    <Text numberOfLines={1} allowFontScaling={false}  style={{ fontSize: 20, fontWeight: 'bold', color: '#868686' }}>Devices</Text>
                 </View>
                 <Animatable.View animation="slideInUp" style={{ flexDirection: 'row'}}>
+                    <View style={styles.row}>
                     <Button title='Luz' ico={lamp} width={80} height={80} onPress={() => command(devices.Bedroom+"/rele4")} />
+                    </View>
+                    <View style={styles.row}>
                     <Button title={statusFan} ico={fan} width={80} height={80} onPress={() => command(devices.fan+"/ventilador")} />
+                    </View>
                 </Animatable.View>
                 <View style={styles.buttomDimer}>
                     <View style={{ width: "90%" }}>
@@ -213,7 +220,6 @@ const styles = StyleSheet.create({
         width: "100%",
         height: '100%',
         alignItems: 'center',
-
     },
     subHeader: {
         width: "100%",
@@ -290,4 +296,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#cdcdcd',
         height: 3,
     },
+    row: {
+        flex:1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    
 })
