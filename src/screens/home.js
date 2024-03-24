@@ -157,8 +157,15 @@ export default function Home() {
 
             const data = await response.json();
             try {
-                setGeneration(data.result);
-                console.log(data.result)
+                if(data.result.today){
+                    setGeneration(data.result);
+                    console.log(data.result)
+                }else{
+                    const dataToday = data.result;
+                    dataToday.today = 0;
+                    setGeneration(dataToday)
+                }
+                
             } catch (error) {
                 setStatusInversor('red');
             }
