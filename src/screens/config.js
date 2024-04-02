@@ -17,8 +17,9 @@ export default function Config(){
     const [valueAuth, setAuth] = useState('')
     const [valueFoxesscloud, setFoxesscloud] = useState('')
     const [valueSN, setSN] = useState('')
+    const [valueTarifa, setTarifa] = useState('')
 
-    const [value, setValue] = useState({fan:'',Bedroom:'',livingRoom:'', name:'',escritorio:'', cozinha:'', edicula:'', host:'', auth:'', foxx:'', sn:''})
+    const [value, setValue] = useState({fan:'',Bedroom:'',livingRoom:'', name:'',escritorio:'', cozinha:'', edicula:'', host:'', auth:'', foxx:'', sn:'', tarifa:''})
     
 
     useEffect(()=>{
@@ -36,7 +37,7 @@ export default function Config(){
     }
 
     const salvarDevices =()=>{
-        if(valueFan != '' || valueBedroom != '' || valuelivingRoom != "" || valueName != '' || valueAuth != '' || valueHost != '' || valueEscritorio != '' || valueCozinha != '' || valueEdicula != '' || valueFoxesscloud != '' || valueSN != ''){
+        if(valueFan != '' || valueBedroom != '' || valuelivingRoom != "" || valueName != '' || valueAuth != '' || valueHost != '' || valueEscritorio != '' || valueCozinha != '' || valueEdicula != '' || valueFoxesscloud != '' || valueSN != '' || valueTarifa != ''){
           
          
              const data = {fan:valueFan || value.fan,
@@ -49,7 +50,9 @@ export default function Config(){
                 host:valueHost || value.host,
                 auth:valueAuth || value.auth,
                 foxx:valueFoxesscloud || value.foxx,
-                sn:valueSN || value.sn}
+                sn:valueSN || value.sn,
+                tarifa:valueTarifa || value.tarifa
+              }
            
           storeData(data)
           ToastAndroid.showWithGravityAndOffset(
@@ -192,6 +195,15 @@ export default function Config(){
               style={styles.inputText}
               placeholder={value.sn || 'SN Inversor'}
               onChangeText={setSN}
+              
+              /> 
+              <View style={{width:'100%', paddingLeft:10}}><Text numberOfLines={1} allowFontScaling={false} style={{fontWeight:'bold', color:'white'}}>Tarifa de Alimentação</Text></View>
+               <TextInput
+              numberOfLines={1} allowFontScaling={false} 
+              style={styles.inputText}
+              keyboardType="numeric"
+              placeholder={value.tarifa || 'Tarifa de alimentação'}
+              onChangeText={setTarifa}
               
               /> 
 
