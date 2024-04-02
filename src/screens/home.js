@@ -26,7 +26,7 @@ export default function Home() {
     const navigation = useNavigation();
 
     const [valueGeneration, setGeneration] = useState({ "cumulative": 0, "month": 0, "today": 0 })
-    const [device, setDevice] = useState({ fan: '', Bedroom: '', livingRoom: '', name: '', escritorio: '', cozinha: '', edicula: '', host: '', auth: '', foxx: '', sn: '' });
+    const [device, setDevice] = useState({ fan: '', Bedroom: '', livingRoom: '', name: '', escritorio: '', cozinha: '', edicula: '', host: '', auth: '', foxx: '', sn: '', tarifa: '' });
     const [KWNow, setKWNow] = useState([]);
     const [circularProgress, setCircularProgress] = useState(0);
     const [statusInversor, setStatusInversor] = useState('red');
@@ -325,6 +325,20 @@ export default function Home() {
 
     }
 
+    const formatCurrency = (value) => {
+        // Converte o valor para número e verifica se é um número válido
+        const floatValue = parseFloat(value);
+        if (isNaN(floatValue)) {
+          return '';
+        }
+    
+        // Formata o valor como moeda brasileira
+        return floatValue.toLocaleString('pt-BR', {
+          style: 'currency',
+          currency: 'BRL',
+        });
+      };
+
 
 
 
@@ -350,18 +364,20 @@ export default function Home() {
                     <View style={styles.containerGeneration}>
                         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: wp(1) }}>
                             <Text numberOfLines={1} allowFontScaling={false} style={{ fontSize: wp(4), color: 'white' }}>Hoje</Text>
-                            <Text numberOfLines={1} allowFontScaling={false} style={{ fontSize: wp(5), fontWeight: 'bold', color: 'white' }}>{valueGeneration.today.toFixed(2)}</Text>
-                            <Text numberOfLines={1} allowFontScaling={false} style={{ fontSize: wp(3), color: 'white' }}>kwh</Text>
+                            <Text numberOfLines={1} allowFontScaling={false} style={{ fontSize: wp(5), fontWeight: 'bold', color: 'white' }}><Text numberOfLines={1} allowFontScaling={false} style={{ fontSize: wp(3), color: 'white' }}>kwh: </Text>{valueGeneration.today.toFixed(2)}</Text>
+                            <Text numberOfLines={1} allowFontScaling={false} style={{ fontSize: wp(3), fontWeight: 'bold', color: 'white' }}>{formatCurrency(valueGeneration.today* device.tarifa)}</Text>
+
                         </View>
                         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: wp(1), borderTopWidth: 1, borderBottomWidth: 1, borderColor: 'gray' }}>
                             <Text numberOfLines={1} allowFontScaling={false} style={{ fontSize: wp(4), color: 'white' }}>Mês</Text>
-                            <Text numberOfLines={1} allowFontScaling={false} style={{ fontSize: wp(5), fontWeight: 'bold', color: 'white' }}>{valueGeneration.month.toFixed(2)}</Text>
-                            <Text numberOfLines={1} allowFontScaling={false} style={{ fontSize: wp(3), color: 'white' }}>kwh</Text>
+                            <Text numberOfLines={1} allowFontScaling={false} style={{ fontSize: wp(5), fontWeight: 'bold', color: 'white' }}><Text numberOfLines={1} allowFontScaling={false} style={{ fontSize: wp(3), color: 'white' }}>kwh: </Text>{valueGeneration.month.toFixed(2)}</Text>
+                            <Text numberOfLines={1} allowFontScaling={false} style={{ fontSize: wp(3), fontWeight: 'bold', color: 'white' }}>{formatCurrency(valueGeneration.month * device.tarifa)}</Text>
+
                         </View>
                         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: wp(1) }}>
                             <Text numberOfLines={1} allowFontScaling={false} style={{ fontSize: wp(4), color: 'white' }}>Acumulado</Text>
-                            <Text numberOfLines={1} allowFontScaling={false} style={{ fontSize: wp(5), fontWeight: 'bold', color: 'white' }}>{valueGeneration.cumulative.toFixed(2)}</Text>
-                            <Text numberOfLines={1} allowFontScaling={false} style={{ fontSize: wp(3), color: 'white' }}>kwh</Text>
+                            <Text numberOfLines={1} allowFontScaling={false} style={{ fontSize: wp(5), fontWeight: 'bold', color: 'white' }}><Text numberOfLines={1} allowFontScaling={false} style={{ fontSize: wp(3), color: 'white' }}>kwh: </Text>{valueGeneration.cumulative.toFixed(2)}</Text>
+                            <Text numberOfLines={1} allowFontScaling={false} style={{ fontSize: wp(3), fontWeight: 'bold', color: 'white' }}>{formatCurrency(valueGeneration.cumulative * device.tarifa)}</Text>
                         </View>
                     </View>
 
@@ -377,7 +393,7 @@ export default function Home() {
                             rotation={0}
                         />
                         <Image source={require('../assets/icon_ennergy_bg.png')} style={styles.overlayImage} />
-                        <Text numberOfLines={1} allowFontScaling={false} style={styles.overlayText}>kwh</Text>
+                        <Text numberOfLines={1} allowFontScaling={false} style={styles.overlayText}>kw</Text>
                         <Text numberOfLines={1} allowFontScaling={false} style={[styles.overlayText, { fontWeight: 'bold', fontSize: wp(6) }]}>{KWNow}</Text>
                     </TouchableOpacity >
                 </View>
